@@ -20,34 +20,38 @@ export class AuthController {
   async googleAuth() {}
 
   @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
-  async googleCallback(
-    @Req() req: any,
-    @Res() res: any,
+@UseGuards(AuthGuard('google'))
+async googleCallback(
+  @Req() req: any,
+  @Res() res: any,
+) {
+  const user =
+    await this.authService.validateGoogleUser(
+      req.user,
+    );
+
+  const frontendUrl =
+    process.env.FRONTEND_URL ||
+    'https://weather-alert-mauve.vercel.app';
+
+  if (
+    user.status === 'pending' ||
+    user.status === 'approved' ||
+    user.status === 'rejected'
   ) {
-    const user =
-      await this.authService.validateGoogleUser(
-        req.user,
-      );
-
-    if (
-      user.status === 'pending' ||
-      user.status === 'approved' ||
-      user.status === 'rejected'
-    ) {
-      return res.redirect(
-        `http://localhost:5173/status?email=${encodeURIComponent(
-          user.email,
-        )}`,
-      );
-    }
-
     return res.redirect(
-      `http://localhost:5173/request-access?email=${encodeURIComponent(
+      `${frontendUrl}/status?email=${encodeURIComponent(
         user.email,
-      )}&name=${encodeURIComponent(
-        user.name,
       )}`,
     );
   }
+
+  return res.redirect(
+    `${frontendUrl}/request-access?email=${encodeURIComponent(
+      user.email,
+    )}&name=${encodeURIComponent(
+      user.name,
+    )}`,
+  );
+}
 }
