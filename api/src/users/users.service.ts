@@ -124,38 +124,53 @@ export class UsersService {
     return { code };
   }
 
-  async linkTelegramChat(
-    code: string,
-    chatId: string,
-  ) {
-   
+async linkTelegramChat(
+  code: string,
+  chatId: string,
+) {
+  console.log('INPUT CODE:', code);
 
-    const user = await this.userModel.findOne({
-      telegramLinkCode: code.trim(),
-    });
+  const user = await this.userModel.findOne({
+    telegramLinkCode: code.trim(),
+  });
 
-    if (!user) {
-      return null;
-    }
+  console.log('FOUND USER:', user);
 
-    if (
-      user.telegramLinkCodeExpiry &&
-      user.telegramLinkCodeExpiry <
-        new Date()
-    ) {
-      return null;
-    }
-
-    return this.userModel.findByIdAndUpdate(
-      user._id,
-      {
-        telegramChatId: chatId,
-        telegramLinkCode: null,
-        telegramLinkCodeExpiry: null,
-      },
-      {
-        new: true,
-      },
-    );
+  if (!user) {
+    console.log('NO USER FOUND');
+    return null;
   }
+
+  console.log(
+    'EXPIRY:',
+    user.telegramLinkCodeExpiry,
+  );
+
+  console.log(
+    'NOW:',
+    new Date(),
+  );
+
+  if (
+    user.telegramLinkCodeExpiry &&
+    user.telegramLinkCodeExpiry < new Date()
+  ) {
+    console.log('CODE EXPIRED');
+    return null;
+  }
+
+  console.log('LINKING USER');
+
+  return this.userModel.findByIdAndUpdate(
+    user._id,
+    {
+      telegramChatId: chatId,
+      telegramLinkCode: null,
+      telegramLinkCodeExpiry: null,
+    },
+    {
+      new: true,
+    },
+  );
+}
 }

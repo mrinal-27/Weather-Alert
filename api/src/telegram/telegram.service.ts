@@ -130,7 +130,11 @@ async onModuleInit() {
   });
 
   this.bot.command('link', async (ctx) => {
-    const text = ctx.message.text;
+  console.log('LINK COMMAND HIT');
+
+  const text = ctx.message.text;
+
+  console.log('MESSAGE:', text);
     const parts = text.split(' ');
 
     if (parts.length < 2) {
