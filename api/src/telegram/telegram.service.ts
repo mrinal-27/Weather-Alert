@@ -129,8 +129,9 @@ async onModuleInit() {
     );
   });
 
-  this.bot.command('link', async (ctx) => {
+  this.bot.hears(/^\/link/, async (ctx) => {
   console.log('LINK COMMAND HIT');
+  console.log('MESSAGE:', ctx.message.text);
 
   const text = ctx.message.text;
 
