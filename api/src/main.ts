@@ -9,15 +9,14 @@ async function bootstrap() {
   console.log('STEP 2');
 
   app.enableCors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-  });
+  origin: [
+    'http://localhost:5173',
+    'https://weather-alert-silk.vercel.app',
+  ],
+  credentials: true,
+});
 
-  console.log('STEP 3');
-
-  await app.listen(5000);
-
-  console.log('STEP 4');
+await app.listen(process.env.PORT || 5000);
 }
 
 bootstrap().catch((err) => {
