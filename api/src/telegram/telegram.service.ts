@@ -201,18 +201,24 @@ Condition: ${condition}`,
 
   console.log('BEFORE BOT LAUNCH');
 
-  this.bot
-    .launch()
-    .then(() => {
-      console.log(
-        '✅ Telegram bot polling started',
-      );
-    })
-    .catch((err) => {
-      console.error(
-        'Telegram launch error:',
-        err,
-      );
-    });
+ this.bot
+  .launch()
+  .then(() => {
+    console.log(
+      '✅ Telegram bot polling started',
+    );
+  })
+  .catch((err) => {
+    console.error(
+      'Telegram launch error:',
+      err,
+    );
+  });
+
+console.log('AFTER LAUNCH CALL');
+console.log(
+  'BOT TOKEN END:',
+  process.env.BOT_TOKEN?.slice(-10),
+);
 }
 }
