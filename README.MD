@@ -57,13 +57,6 @@ npm run dev
 
 Create a `.env` file inside the backend directory and configure the MongoDB connection string, Google OAuth credentials, Telegram bot token, JWT secret, and OpenWeather API key.
 
-## Admin Access
-
-Demo administrator credentials:
-
-Email: [admin@weatherguard.com](mailto:admin@weatherguard.com)
-
-Password: Admin@123
 
 ## Future Enhancements
 
