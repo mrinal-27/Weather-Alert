@@ -12,22 +12,33 @@ export class SchedulerService {
     private readonly weatherService: WeatherService,
   ) {}
 
-  @Cron('* * * * *')
+  @Cron('0 8 * * *')
   async sendAlerts() {
     console.log('Weather alert job running');
 
-    const approvedUsers = await this.usersService.getApprovedUsers();
+    const approvedUsers =
+      await this.usersService.getApprovedUsers();
+
     if (!approvedUsers.length) {
       console.log('No approved users to alert');
       return;
     }
 
-    const weather = await this.weatherService.getWeather();
-    const temperature = Math.round(weather.main?.temp ?? 0);
+    const weather =
+      await this.weatherService.getWeather();
+
+    const temperature = Math.round(
+      weather.main?.temp ?? 0,
+    );
+
     const condition = weather.weather?.[0]?.description
       ? weather.weather[0].description
           .split(' ')
-          .map((word: string) => word[0].toUpperCase() + word.slice(1))
+          .map(
+            (word: string) =>
+              word[0].toUpperCase() +
+              word.slice(1),
+          )
           .join(' ')
       : 'Unknown';
 
@@ -35,17 +46,25 @@ export class SchedulerService {
 
 Location: Pune
 Temperature: ${temperature}°C
-Condition: ${condition}`;
+Condition: ${condition}
+
+Stay safe and have a great day!`;
 
     await Promise.all(
       approvedUsers
-        .filter((user) => user.telegramChatId)
+        .filter(
+          (user) => user.telegramChatId,
+        )
         .map((user) =>
           this.telegramService.sendMessage(
             user.telegramChatId!,
             message,
           ),
         ),
+    );
+
+    console.log(
+      `Sent alerts to ${approvedUsers.length} users`,
     );
   }
 }
