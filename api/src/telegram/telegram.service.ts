@@ -160,43 +160,59 @@ async onModuleInit() {
     }
 
     await ctx.reply(
-      '✅ Telegram account linked successfully!',
-    );
+  '✅ Telegram account linked successfully!',
+);
 
-    try {
-      const weather =
-        await this.weatherService.getWeather();
+console.log('STEP A');
 
-      const temperature = Math.round(
-        weather.main?.temp ?? 0,
-      );
+try {
+  console.log('STEP B');
 
-      const condition =
-        weather.weather?.[0]?.description
-          ? weather.weather[0].description
-              .split(' ')
-              .map(
-                (word: string) =>
-                  word[0].toUpperCase() +
-                  word.slice(1),
-              )
-              .join(' ')
-          : 'Unknown';
+  const weather =
+    await this.weatherService.getWeather();
 
-      await ctx.reply(
-        `🌦 Current Weather
+  console.log('STEP C');
+  console.log(weather);
+
+  const temperature = Math.round(
+    weather.main?.temp ?? 0,
+  );
+
+  console.log('STEP D');
+
+  const condition =
+    weather.weather?.[0]?.description
+      ? weather.weather[0].description
+          .split(' ')
+          .map(
+            (word: string) =>
+              word[0].toUpperCase() +
+              word.slice(1),
+          )
+          .join(' ')
+      : 'Unknown';
+
+  console.log('STEP E');
+
+  await ctx.reply(
+    `🌦 Current Weather
 
 Location: Pune
 Temperature: ${temperature}°C
 Condition: ${condition}`,
-      );
-    } catch (error) {
-      console.error(error);
+  );
 
-      await ctx.reply(
-        '⚠️ Account linked successfully, but weather data could not be fetched.',
-      );
-    }
+  console.log('STEP F');
+} catch (error: any) {
+  console.error(
+    'WEATHER ERROR:',
+    error?.response?.data || error,
+  );
+
+  await ctx.reply(
+    '⚠️ Weather failed',
+  );
+}
   });
 
   console.log('BEFORE BOT LAUNCH');
